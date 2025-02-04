@@ -6,8 +6,9 @@ import ffmpeg
 from flask import send_file
 import shutil
 import os
+import awsgi
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def running():
     return 'Server is running'
 
@@ -52,3 +53,7 @@ def download():
     )
     shutil.make_archive(zip_files, zip_extension, imgs_files_dir)
     return send_file(f'{zip_files}.{zip_extension}', as_attachment=True)
+
+def lambda_handler(event, context):
+    print("Flask app started")
+    return awsgi.response(app, event, context)
