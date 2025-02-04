@@ -1,10 +1,13 @@
-FROM python:3.13.1-slim-buster
+FROM public.ecr.aws/lambda/python:3.13
+LABEL maintainer="https://github.com/6SOATGP54"
 
-WORKDIR /python-docker
+WORKDIR /app
 
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
 COPY . .
+ENV PYTHONPATH="/app"
 
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+# Comando padrão da AWS Lambda para rodar um handler
+CMD ["vapi.routes.lambda_handler"]
