@@ -1,0 +1,19 @@
+{
+    "resource": "/",
+    "path": "/",
+    "httpMethod": "GET",
+    "headers": {
+        "Accept": "application/json",
+        "User-Agent": "curl/7.64.1"
+    },
+    "queryStringParameters": {
+        "param1": "value1"
+    },
+    "requestContext": {
+        "resourcePath": "/",
+        "httpMethod": "GET",
+        "path": "/"
+    },
+    "body": null,
+    "isBase64Encoded": false
+}

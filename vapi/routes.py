@@ -6,7 +6,8 @@ import ffmpeg
 from flask import send_file
 import shutil
 import os
-import awsgi
+import logging
+# import awsgi
 
 @app.route('/', methods=['GET', 'POST'])
 def running():
@@ -14,11 +15,13 @@ def running():
 
 @app.route('/download/zip', methods=['POST'])
 def download():
+    logging.info('Received request...')
     if 'file' not in request.files:
+        logging.error('file not found')
         return 'Arquivo não enviado'
     
     file = request.files['file']
-    print(file)
+    logging.info(f'file: {file}')
     
     base_dir = os.path.join(app.config['STORAGE_FOLDER'], datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
     video_file_dir = os.path.join(base_dir, 'video')
@@ -30,30 +33,44 @@ def download():
     zip_files = os.path.join(zip_files_dir, 'vimgs')
     zip_extension = 'zip'
 
+    logging.info('Preparing processing dirs...')
     utils.make_storage_dir(base_dir, video_file_dir, imgs_files_dir, zip_files_dir)
 
-    print('*******************Dirs**********************')
-    print(base_dir)
-    print(video_file_dir)
-    print(imgs_files_dir)
-    print(zip_files_dir)
-    print('**********************files**********************')
-    print(base_dir)
-    print(video_file)
-    print(imgs_files)
-    print(zip_files)
+    logging.debug('*******************Dirs**********************')
+    logging.debug(base_dir)
+    logging.debug(video_file_dir)
+    logging.debug(imgs_files_dir)
+    logging.debug(zip_files_dir)
+    logging.debug('**********************files**********************')
+    logging.debug(base_dir)
+    logging.debug(video_file)
+    logging.debug(imgs_files)
+    logging.debug(zip_files)
  
+    logging.info('Saving file...')
     file.save(video_file)
     file.close()
+    logging.info('File saved')
 
+    logging.info('Extracting images from video...')
     (
 	ffmpeg.input(video_file)
 	    .output(imgs_files)
 	    .run()
     )
+    logging.info('Extraction OK')
+
+    logging.info('Zipping...')
     shutil.make_archive(zip_files, zip_extension, imgs_files_dir)
+    logging.info('ZIP process is done')
     return send_file(f'{zip_files}.{zip_extension}', as_attachment=True)
 
 def lambda_handler(event, context):
     print("Flask app started")
     return awsgi.response(app, event, context)
+
+@app.route('/aws/post/test', methods=['POST'])
+def aws_post():
+    body = request.data
+    print(body)
+    return f'Received: {body}'
