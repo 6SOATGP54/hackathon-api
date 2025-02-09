@@ -7,7 +7,7 @@ from flask import send_file
 import shutil
 import os
 import logging
-# import awsgi
+import awsgi
 
 @app.route('/', methods=['GET', 'POST'])
 def running():
