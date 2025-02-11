@@ -1,6 +1,6 @@
 # API para Processamento de Imagens
 
-Este repositório contém a API da aplicação de multiprocessamento de vídeos da **FIAP X**. A API permite que os usuários façam multiupload de vídeos, acompanhem o status do processamento e façam o download dos arquivos gerados.
+Este repositório contém a API da [aplicação de multiprocessamento de vídeos](https://github.com/6SOATGP54/hackathon-web) da **FIAP X**. A API permite que os usuários façam multiupload de vídeos, acompanhem o status do processamento e façam o download dos arquivos gerados.
 
 <p align="center">
     <img src="docs/preview-web.png"></img><br>
