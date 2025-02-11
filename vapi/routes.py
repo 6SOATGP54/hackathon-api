@@ -7,7 +7,7 @@ from flask import send_file
 import shutil
 import os
 import logging
-import awsgi
+# import awsgi
 
 @app.route('/', methods=['GET', 'POST'])
 def running():
@@ -68,9 +68,3 @@ def download():
 def lambda_handler(event, context):
     print("Flask app started")
     return awsgi.response(app, event, context)
-
-@app.route('/aws/post/test', methods=['POST'])
-def aws_post():
-    body = request.data
-    print(body)
-    return f'Received: {body}'
